@@ -1,9 +1,10 @@
-module CasaOS
+module Learn-CasaOS
 
 go 1.17
 
 require (
 	github.com/gin-gonic/gin v1.7.7
+	github.com/go-ini/ini v1.66.2
 	gorm.io/gorm v1.22.4
 )
 

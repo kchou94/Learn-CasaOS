@@ -18,7 +18,7 @@ type UserModel struct {
 }
 
 // 服务配置
-type ServiceModel struct {
+type ServerModel struct {
 	HttpPort  string
 	RunMode   string
 	ServerApi string

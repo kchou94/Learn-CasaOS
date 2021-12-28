@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 
-	"github.com/bernylinville/Learn-CasaOS/pkg/config"
+	"Learn-CasaOS/pkg/config"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

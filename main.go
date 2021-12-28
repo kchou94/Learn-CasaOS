@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 
+	"github.com/bernylinville/Learn-CasaOS/pkg/config"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -14,4 +15,5 @@ var configFlag = flag.String("c", "", "config address")
 
 func init() {
 	flag.Parse()
+	config.InitSetup(*configFlag)
 }

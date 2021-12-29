@@ -9,7 +9,7 @@ import (
 
 type ddnsStruct struct {
 	db  *gorm.DB
-	log loger2.Olog
+	log loger2.OLog
 }
 
 type DDNSService interface {
@@ -50,6 +50,6 @@ func (d *ddnsStruct) SaveConfig(model model.DDNSUpdateDBModel) error {
 	return nil
 }
 
-func NewDDNSService(db *gorm.DB, log loger2.Olog) DDNSService {
+func NewDDNSService(db *gorm.DB, log loger2.OLog) DDNSService {
 	return &ddnsStruct{db, log}
 }

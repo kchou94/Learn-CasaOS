@@ -9,10 +9,10 @@ type DockerService interface{}
 
 type dockerService struct {
 	rootDir string
-	log     loger2.Olog
+	log     loger2.OLog
 }
 
-func NewDockerService(log loger2.Olog) DockerService {
+func NewDockerService(log loger2.OLog) DockerService {
 	return &dockerService{
 		rootDir: command2.ExecResultStr(`source ./shell/helper.sh ;GetDockerRootDir`),
 		log:     log,

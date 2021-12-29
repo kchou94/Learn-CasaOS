@@ -37,7 +37,7 @@ type AppService interface {
 
 type appStruct struct {
 	db  *gorm.DB
-	log loger2.Olog
+	log loger2.OLog
 }
 
 // 获取我的应用列表
@@ -195,7 +195,7 @@ func (a *appStruct) RemoveContainerById(id string) {
 	a.db.Table(model2.CONTAINERTABLENAME).Where("custom_id = ?", id).Delete(model2.AppListDBModel{})
 }
 
-func NewAppService(db *gorm.DB, logger loger2.Olog) AppService {
+func NewAppService(db *gorm.DB, logger loger2.OLog) AppService {
 	return &appStruct{
 		db:  db,
 		log: logger,

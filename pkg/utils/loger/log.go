@@ -15,7 +15,7 @@ import (
 // 定义一个int的别名
 type Level int
 
-type Olog interface {
+type OLog interface {
 	Debug(v ...interface{})
 	Info(v ...interface{})
 	Warn(v ...interface{})

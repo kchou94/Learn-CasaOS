@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"Learn-CasaOS/pkg/config"
+	"Learn-CasaOS/pkg/sqlite"
 	loger2 "Learn-CasaOS/pkg/utils/loger"
 
 	"github.com/gin-gonic/gin"
@@ -19,4 +20,5 @@ func init() {
 	flag.Parse()
 	config.InitSetup(*configFlag)
 	loger2.LogSetup()
+	sqliteDB = sqlite.GetDb(config.AppInfo.ProjectPath)
 }

@@ -3,6 +3,8 @@ package service
 import (
 	"Learn-CasaOS/model"
 	"Learn-CasaOS/pkg/config"
+	"Learn-CasaOS/pkg/docker"
+	"Learn-CasaOS/pkg/utils/command"
 	httper2 "Learn-CasaOS/pkg/utils/httper"
 	loger2 "Learn-CasaOS/pkg/utils/loger"
 	model2 "Learn-CasaOS/service/model"
@@ -11,9 +13,12 @@ import (
 	"strings"
 	"time"
 
+	json2 "encoding/json"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	client2 "github.com/docker/docker/client"
+	"github.com/tidwall/gjson"
 	"gorm.io/gorm"
 )
 
@@ -157,5 +162,42 @@ func (a *appStruct) GetServerAppInfo(id string) model.ServerAppList {
 
 	go func() {
 		str := httper2.Get(config.ServerInfo.ServerApi+"/token", nil)
+
+		t <- gjson.Get(str, "data").String()
 	}()
+	head["Authorization"] = <-t
+
+	infoS := httper2.Get(config.ServerInfo.ServerApi+"/v1/app/info/"+id, head)
+
+	info := model.ServerAppList{}
+	err := json2.Unmarshal([]byte(gjson.Get(infoS, "data").String()), &info)
+	if err != nil {
+		a.log.Error("app.GetServerAppInfo", err)
+	}
+
+	return info
+
+}
+
+func (a *appStruct) SaveContainer(m model2.AppListDBModel) {
+	a.db.Table(model2.CONTAINERTABLENAME).Create(&m)
+}
+
+func (a *appStruct) UpdateApp(m model2.AppListDBModel) {
+	a.db.Table(model2.CONTAINERTABLENAME).Save(&m)
+}
+
+func (a *appStruct) DelAppConfigDir(id string) {
+	command.OnlyExec("source " + config.AppInfo.ProjectPath + "/shell/helper.sh ;DelAppConfigDir " + docker.GetDir(id, "/config"))
+}
+
+func (a *appStruct) RemoveContainerById(id string) {
+	a.db.Table(model2.CONTAINERTABLENAME).Where("custom_id = ?", id).Delete(model2.AppListDBModel{})
+}
+
+func NewAppService(db *gorm.DB, logger loger2.Olog) AppService {
+	return &appStruct{
+		db:  db,
+		log: logger,
+	}
 }

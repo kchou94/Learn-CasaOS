@@ -2,6 +2,7 @@ package v1
 
 import (
 	"Learn-CasaOS/model"
+	jwt2 "Learn-CasaOS/pkg/utils/jwt"
 	oasis_err2 "Learn-CasaOS/pkg/utils/oasis_err"
 	"Learn-CasaOS/service"
 	"net/http"
@@ -35,5 +36,11 @@ func Login(c *gin.Context) {
 				Message: oasis_err2.GetMsg(oasis_err2.INVALID_PARAMS),
 			})
 		return
+	}
+
+	// if config.UserInfo.UserName == username && config.UserInfo.PWD == pwd {
+	if username == "admin" && pwd == "admin" {
+		token := jwt2.GetToken(username, pwd)
+
 	}
 }

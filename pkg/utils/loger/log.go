@@ -95,6 +95,6 @@ func setPrefix(lever Level) {
 	logger.SetPrefix(logPrefix)
 }
 
-func NewOLoger() Olog {
+func NewOLoger() OLog {
 	return &oLog{}
 }

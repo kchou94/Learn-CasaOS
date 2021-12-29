@@ -6,6 +6,7 @@ import (
 	"Learn-CasaOS/pkg/config"
 	"Learn-CasaOS/pkg/sqlite"
 	loger2 "Learn-CasaOS/pkg/utils/loger"
+	"Learn-CasaOS/service"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -21,4 +22,6 @@ func init() {
 	config.InitSetup(*configFlag)
 	loger2.LogSetup()
 	sqliteDB = sqlite.GetDb(config.AppInfo.ProjectPath)
+	// gredis.GetRedisConn(config.RedisInfo),
+	service.MyService = service.NewService(sqliteDB, loger2.NewOLoger())
 }

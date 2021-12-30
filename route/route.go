@@ -52,6 +52,13 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 			// 获取用户详情
 			v1UserGroup.GET("/info", v1.UserInfo)
 		}
+
+		v1ZiMaGroup := v1Group.Group("/zima")
+		v1ZiMaGroup.Use()
+		{
+			// 获取cpu信息
+			v1ZiMaGroup.GET("/getcpuinfo", v1.CpuInfo)
+		}
 	}
 
 	return r

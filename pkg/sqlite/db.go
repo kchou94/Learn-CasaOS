@@ -18,7 +18,10 @@ func GetDb(projectPath string) *gorm.DB {
 		return gdb
 	}
 
-	file.IsNotExistMkDir(projectPath + "/db/")
+	err := file.IsNotExistMkDir(projectPath + "/db/")
+	if err != nil {
+		fmt.Println(err)
+	}
 	db, err := gorm.Open(sqlite.Open(projectPath+"/db/CasaOS.db"), &gorm.Config{})
 	c, _ := db.DB()
 	c.SetMaxIdleConns(10)
@@ -27,7 +30,6 @@ func GetDb(projectPath string) *gorm.DB {
 	if err != nil {
 		fmt.Println("连接数据失败!")
 		panic("数据连接失败")
-		return nil
 	}
 
 	gdb = db

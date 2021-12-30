@@ -5,8 +5,12 @@ import (
 	oasis_err2 "Learn-CasaOS/pkg/utils/oasis_err"
 	"Learn-CasaOS/service"
 	"net/http"
+	"strings"
+	"time"
+	"unsafe"
 
 	"github.com/gin-gonic/gin"
+	"github.com/shirou/gopsutil/v3/disk"
 )
 
 // @Summary 获取cpu信息
@@ -77,5 +81,69 @@ func DiskInfo(c *gin.Context) {
 func NetInfo(c *gin.Context) {
 	netList := service.MyService.ZiMa().GetNetInfo()
 
-	newNet:=[]
+	newNet := []model.IOCountersStat{}
+	for _, n := range netList {
+		for _, netCardName := range service.MyService.ZiMa().GetNet(true) {
+			if n.Name == netCardName {
+				item := *(*model.IOCountersStat)(unsafe.Pointer(&n))
+				item.State = strings.TrimSpace(service.MyService.ZiMa().GetNetState(n.Name))
+				item.DateTime = time.Now()
+				newNet = append(newNet, item)
+				break
+			}
+		}
+	}
+
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.SUCCESS,
+			Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+			Data:    newNet,
+		})
+}
+
+// @Summary 获取信息
+// @Produce  application/json
+// @Accept application/json
+// @Tags zima
+// @Security ApiKeyAuth
+// @Success 200 {string} string "ok"
+// @Router /zima/getinfo [get]
+func Info(c *gin.Context) {
+	var data = make(map[string]interface{}, 4)
+
+	var diskArr []*disk.UsageStat
+	diskArr = append(diskArr, service.MyService.ZiMa().GetDiskInfo())
+	data["disk"] = diskArr
+
+	cpu := service.MyService.ZiMa().GetCpuPercent()
+	num := service.MyService.ZiMa().GetCpuCoreNum()
+	cpuData := make(map[string]interface{})
+	cpuData["percent"] = cpu
+	cpuData["num"] = num
+	data["cpu"] = cpuData
+
+	data["mem"] = service.MyService.ZiMa().GetMemInfo()
+
+	netList := service.MyService.ZiMa().GetNetInfo()
+	newNet := []model.IOCountersStat{}
+	for _, n := range netList {
+		for _, netCardName := range service.MyService.ZiMa().GetNet(true) {
+			if n.Name == netCardName {
+				item := *(*model.IOCountersStat)(unsafe.Pointer(&n))
+				item.State = strings.TrimSpace(service.MyService.ZiMa().GetNetState(n.Name))
+				item.DateTime = time.Now()
+				newNet = append(newNet, item)
+				break
+			}
+		}
+	}
+	data["net"] = newNet
+
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.SUCCESS,
+			Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+			Data:    data,
+		})
 }

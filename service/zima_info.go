@@ -1,6 +1,8 @@
 package service
 
 import (
+	"Learn-CasaOS/pkg/config"
+	command2 "Learn-CasaOS/pkg/utils/command"
 	"fmt"
 	"runtime"
 	"strconv"
@@ -17,6 +19,8 @@ type ZiMaService interface {
 	GetMemInfo() *mem.VirtualMemoryStat
 	GetDiskInfo() *disk.UsageStat
 	GetNetInfo() []net.IOCountersStat
+	GetNet(physics bool) []string
+	GetNetState(name string) string
 }
 
 type zima struct {
@@ -61,6 +65,20 @@ func (c *zima) GetDiskInfo() *disk.UsageStat {
 func (c *zima) GetNetInfo() []net.IOCountersStat {
 	netInfo, _ := net.IOCounters(true)
 	return netInfo
+}
+
+// shell脚本参数 {1:虚拟网卡  2:物理网卡}
+func (c *zima) GetNet(physics bool) []string {
+	t := "1"
+	if physics {
+		t = "2"
+	}
+	return command2.ExecResultStrArray("source " + config.AppInfo.ProjectPath + "/shell/helper.sh ;GetNetCard " + t)
+}
+
+// shell脚本参数 { 网卡名称 }
+func (c *zima) GetNetState(name string) string {
+	return command2.ExecResultStr("source " + config.AppInfo.ProjectPath + "/shell/helper.sh ;CatNetCardState " + name)
 }
 
 func NewZiMaService() ZiMaService {

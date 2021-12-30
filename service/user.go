@@ -1,9 +1,15 @@
 package service
 
-import "Learn-CasaOS/pkg/config"
+import (
+	"Learn-CasaOS/pkg/config"
+	"io"
+	"mime/multipart"
+	"os"
+)
 
 type UserService interface {
 	SetUser(username, pwd, token, email, desc string) error
+	UploadFile(file multipart.File, name string) error
 }
 
 type user struct{}
@@ -30,6 +36,14 @@ func (c *user) SetUser(username, pwd, token, email, desc string) error {
 		config.UserInfo.Description = desc
 	}
 	config.Cfg.SaveTo("conf/conf.ini")
+	return nil
+}
+
+// 上传文件
+func (c *user) UploadFile(file multipart.File, url string) error {
+	out, _ := os.OpenFile(url, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
+	defer out.Close()
+	io.Copy(out, file)
 	return nil
 }
 

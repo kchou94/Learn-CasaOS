@@ -100,3 +100,23 @@ func Login(c *gin.Context) {
 			Message: oasis_err2.GetMsg(oasis_err2.ERROR),
 		})
 }
+
+// @Summary 修改头像
+// @Produce  application/json
+// @Accept multipart/form-data
+// @Tags user
+// @Param file formData file true "用户头像"
+// @Security ApiKeyAuth
+// @Success 200 {string} string "ok"
+// @Router /user/changhead [post]
+func Up_Load_Head(c *gin.Context) {
+	file, _, _ := c.Request.FormFile("file")
+	user_service.UploadFile(file, config.UserInfo.Head)
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.SUCCESS,
+			Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+			Data:    config.UserInfo.Head,
+		})
+	return
+}

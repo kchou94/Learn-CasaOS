@@ -149,3 +149,67 @@ func Chang_User_Name(c *gin.Context) {
 		})
 	return
 }
+
+// @Summary 修改密码
+// @Produce  application/json
+// @Accept multipart/form-data
+// @Tags user
+// @Param pwd formData string true "Password"
+// @Param oldpwd  formData string true "Old password"
+// @Security ApiKeyAuth
+// @Success 200 {string} string "ok"
+// @Router /user/changuserpwd [put]
+func Chang_User_Pwd(c *gin.Context) {
+	oldpwd := c.PostForm("oldpwd")
+	pwd := c.PostForm("pwd")
+	if len(pwd) == 0 || config.UserInfo.PWD != oldpwd {
+		c.JSON(http.StatusOK,
+			model.Result{
+				Success: oasis_err2.ERROR,
+				Message: oasis_err2.GetMsg(oasis_err2.ERROR),
+			})
+		return
+	}
+	user_service.SetUser("", pwd, "", "", "")
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.SUCCESS,
+			Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+		})
+	return
+}
+
+// @Summary 修改用户信息
+// @Produce  application/json
+// @Accept multipart/form-data
+// @Tags user
+// @Param username formData string false "User Name"
+// @Param email formData string false "Email"
+// @Param description formData string false "Description"
+// @Param pwd formData string false "Password"
+// @Param oldpwd  formData string false "Old password"
+// @Security ApiKeyAuth
+// @Success 200 {string} string "ok"
+// @Router /user/changuserinfo [post]
+func Chang_User_Info(c *gin.Context) {
+	username := c.PostForm("username")
+	email := c.PostForm("email")
+	description := c.PostForm("description")
+	oldpwd := c.PostForm("oldpwd")
+	pwd := c.PostForm("pwd")
+	if len(pwd) > 0 && config.UserInfo.PWD != oldpwd {
+		c.JSON(http.StatusOK,
+			model.Result{
+				Success: oasis_err2.ERROR,
+				Message: oasis_err2.GetMsg(oasis_err2.ERROR),
+			})
+		return
+	}
+	user_service.SetUser(username, pwd, "", email, description)
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.SUCCESS,
+			Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+		})
+	return
+}

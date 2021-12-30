@@ -50,4 +50,9 @@ func Login(c *gin.Context) {
 			})
 		return
 	}
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.ERROR,
+			Message: oasis_err2.GetMsg(oasis_err2.ERROR),
+		})
 }

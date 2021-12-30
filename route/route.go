@@ -27,7 +27,7 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 	}
 
 	// 登录
-	r.POST("/login", v1.Login)
+	r.POST("/v1/user/login", v1.Login)
 
 	return r
 }

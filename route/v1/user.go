@@ -213,3 +213,26 @@ func Chang_User_Info(c *gin.Context) {
 		})
 	return
 }
+
+// @Summary 获取用户详情
+// @Produce  application/json
+// @Accept mapplication/json
+// @Tags user
+// @Security ApiKeyAuth
+// @Success 200 {string} string "ok"
+// @Router /user/info [get]
+func UserInfo(c *gin.Context) {
+	var u = make(map[string]string, 2)
+	u["user_name"] = config.UserInfo.UserName
+	u["token"] = config.UserInfo.Token
+	u["head"] = config.UserInfo.Head
+	u["email"] = config.UserInfo.Email
+	u["description"] = config.UserInfo.Description
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.SUCCESS,
+			Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+			Data:    u,
+		})
+	return
+}

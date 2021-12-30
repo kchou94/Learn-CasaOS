@@ -49,6 +49,8 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 			v1UserGroup.POST("/changuserpwd", v1.Chang_User_Pwd)
 			// 修改用户信息
 			v1UserGroup.POST("/changuserinfo", v1.Chang_User_Info)
+			// 获取用户详情
+			v1UserGroup.GET("/info", v1.UserInfo)
 		}
 	}
 

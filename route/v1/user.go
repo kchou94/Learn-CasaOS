@@ -41,6 +41,13 @@ func Login(c *gin.Context) {
 	// if config.UserInfo.UserName == username && config.UserInfo.PWD == pwd {
 	if username == "admin" && pwd == "admin" {
 		token := jwt2.GetToken(username, pwd)
-
+		// user_service.SetUser("", "", token, "", "")
+		c.JSON(http.StatusOK,
+			model.Result{
+				Success: oasis_err2.SUCCESS,
+				Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+				Data:    token,
+			})
+		return
 	}
 }

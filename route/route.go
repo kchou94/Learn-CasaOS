@@ -42,7 +42,9 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 			// 设置用户
 			v1UserGroup.POST("/setusernamepwd", v1.Set_Name_Pwd)
 			// 修改头像
-			v1UserGroup.POST("/changehead", v1.Up_Load_Head)
+			v1UserGroup.POST("/changhead", v1.Up_Load_Head)
+			// 修改用户名
+			v1UserGroup.POST("/changusername", v1.Chang_User_Name)
 		}
 	}
 

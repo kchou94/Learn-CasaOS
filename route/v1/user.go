@@ -120,3 +120,32 @@ func Up_Load_Head(c *gin.Context) {
 		})
 	return
 }
+
+// @Summary 修改用户名
+// @Produce  application/json
+// @Accept multipart/form-data
+// @Tags user
+// @Param username formData string true "User name"
+// @Param oldname  formData string true "Old user name"
+// @Security ApiKeyAuth
+// @Success 200 {string} string "ok"
+// @Router /user/changusername [put]
+func Chang_User_Name(c *gin.Context) {
+	oldname := c.PostForm("oldname")
+	username := c.PostForm("username")
+	if len(username) == 0 || config.UserInfo.UserName != oldname {
+		c.JSON(http.StatusOK,
+			model.Result{
+				Success: oasis_err2.ERROR,
+				Message: oasis_err2.GetMsg(oasis_err2.ERROR),
+			})
+		return
+	}
+	user_service.SetUser(username, "", "", "", "")
+	c.JSON(http.StatusOK,
+		model.Result{
+			Success: oasis_err2.SUCCESS,
+			Message: oasis_err2.GetMsg(oasis_err2.SUCCESS),
+		})
+	return
+}

@@ -7,12 +7,16 @@ import (
 
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
+	"github.com/shirou/gopsutil/v3/mem"
+	"github.com/shirou/gopsutil/v3/net"
 )
 
 type ZiMaService interface {
 	GetCpuPercent() float64
 	GetCpuCoreNum() int
+	GetMemInfo() *mem.VirtualMemoryStat
 	GetDiskInfo() *disk.UsageStat
+	GetNetInfo() []net.IOCountersStat
 }
 
 type zima struct {
@@ -31,6 +35,12 @@ func (z *zima) GetCpuCoreNum() int {
 	return count
 }
 
+// 获取内存详情
+func (z *zima) GetMemInfo() *mem.VirtualMemoryStat {
+	memInfo, _ := mem.VirtualMemory()
+	return memInfo
+}
+
 // 获取硬盘详情
 func (c *zima) GetDiskInfo() *disk.UsageStat {
 	path := "/"
@@ -45,6 +55,12 @@ func (c *zima) GetDiskInfo() *disk.UsageStat {
 	diskInfo.UsedPercent, _ = strconv.ParseFloat(fmt.Sprintf(".1f", diskInfo.UsedPercent), 64)
 	diskInfo.InodesUsedPercent, _ = strconv.ParseFloat(fmt.Sprintf(".1f", diskInfo.InodesUsedPercent), 64)
 	return diskInfo
+}
+
+// 网络信息
+func (c *zima) GetNetInfo() []net.IOCountersStat {
+	netInfo, _ := net.IOCounters(true)
+	return netInfo
 }
 
 func NewZiMaService() ZiMaService {

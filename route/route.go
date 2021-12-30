@@ -58,6 +58,12 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 		{
 			// 获取cpu信息
 			v1ZiMaGroup.GET("/getcpuinfo", v1.CpuInfo)
+			// 获取内存信息
+			v1ZiMaGroup.GET("/getmeminfo", v1.MemInfo)
+			// 获取磁盘信息
+			v1ZiMaGroup.GET("/getdiskinfo", v1.DiskInfo)
+			// 获取网络信息
+			v1ZiMaGroup.GET("/getnetinfo", v1.NetInfo)
 		}
 	}
 

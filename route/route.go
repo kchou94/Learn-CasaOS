@@ -66,6 +66,8 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 			v1ZiMaGroup.GET("/getnetinfo", v1.NetInfo)
 			// 获取信息
 			v1ZiMaGroup.GET("/getinfo", v1.Info)
+			// 获取系统信息
+			v1ZiMaGroup.GET("/sysinfo", v1.SysInfo)
 		}
 	}
 

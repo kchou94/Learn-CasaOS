@@ -9,6 +9,7 @@ import (
 
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
+	"github.com/shirou/gopsutil/v3/host"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/shirou/gopsutil/v3/net"
 )
@@ -21,6 +22,7 @@ type ZiMaService interface {
 	GetNetInfo() []net.IOCountersStat
 	GetNet(physics bool) []string
 	GetNetState(name string) string
+	GetSysInfo() host.InfoStat
 }
 
 type zima struct {
@@ -79,6 +81,12 @@ func (c *zima) GetNet(physics bool) []string {
 // shell脚本参数 { 网卡名称 }
 func (c *zima) GetNetState(name string) string {
 	return command2.ExecResultStr("source " + config.AppInfo.ProjectPath + "/shell/helper.sh ;CatNetCardState " + name)
+}
+
+// 获取系统信息
+func (c *zima) GetSysInfo() host.InfoStat {
+	info, _ := host.Info()
+	return *info
 }
 
 func NewZiMaService() ZiMaService {

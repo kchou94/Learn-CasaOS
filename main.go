@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"time"
 
 	"Learn-CasaOS/pkg/config"
 	"Learn-CasaOS/pkg/sqlite"
@@ -9,6 +10,7 @@ import (
 	"Learn-CasaOS/route"
 	"Learn-CasaOS/service"
 
+	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 )
 
@@ -26,6 +28,7 @@ func init() {
 	sqliteDB = sqlite.GetDb(config.AppInfo.ProjectPath)
 	// gredis.GetRedisConn(config.RedisInfo),
 	service.MyService = service.NewService(sqliteDB, loger2.NewOLoger())
+	service.Cache = cache.New(5*time.Minute, 60*time.Second)
 }
 
 // @title Oasis API

@@ -24,14 +24,10 @@ type AppListDBModel struct {
 	PortMap    string `json:"port_map"`
 	Label      string `json:"label"`
 	EnableUPNP bool   `json:"enable_upnp"`
-	// Envs       model.EnvArrey  `json:"envs" bson:"envs"`
-	// Ports      model.PortArrey `json:"ports" bson:"ports"`
-	// Volumes    model.PathArrey `json:"volumes" bson:"volumes"`
-	// Devices    model.PathArrey `json:"devices" bson:"devices"`
-	Envs    string `json:"envs"`
-	Ports   string `json:"ports"`
-	Volumes string `json:"volumes"`
-	Devices string `json:"devices"`
+	Envs       string `json:"envs"`
+	Ports      string `json:"ports"`
+	Volumes    string `json:"volumes"`
+	Devices    string `json:"devices"`
 	// Envs      []model.Env     `json:"envs"`
 	// Ports     []model.PortMap `gorm:"type:json" json:"ports"`
 	// Volumes   []model.PathMap `gorm:"type:json" json:"volumes"`
@@ -59,4 +55,6 @@ type MyAppList struct {
 	UpTime   string           `json:"up_time"`
 	Slogan   string           `json:"slogan"`
 	Rely     model.MapStrings `json:"rely"` // [{"mysql":"id"},{"mysql":"id"}]
+	Image    string           `json:"image"`
+	Volumes  string           `json:"volumes"`
 }

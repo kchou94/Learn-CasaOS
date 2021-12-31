@@ -56,7 +56,7 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 		v1ZiMaGroup := v1Group.Group("/zima")
 		v1ZiMaGroup.Use()
 		{
-			// 获取cpu信息
+			// 获取 cpu 信息
 			v1ZiMaGroup.GET("/getcpuinfo", v1.CpuInfo)
 			// 获取内存信息
 			v1ZiMaGroup.GET("/getmeminfo", v1.MemInfo)
@@ -68,6 +68,13 @@ func InitRouter(swagHandler gin.HandlerFunc) *gin.Engine {
 			v1ZiMaGroup.GET("/getinfo", v1.Info)
 			// 获取系统信息
 			v1ZiMaGroup.GET("/sysinfo", v1.SysInfo)
+		}
+
+		v1ZeroTierGroup := v1Group.Group("/zerotier")
+		v1ZeroTierGroup.Use()
+		{
+			// 登录 zerotier 获取 token
+			v1ZeroTierGroup.POST("/login", v1.ZeroTierGetToken)
 		}
 	}
 

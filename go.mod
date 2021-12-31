@@ -8,6 +8,7 @@ require (
 	github.com/docker/docker v20.10.12+incompatible
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-ini/ini v1.66.2
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/shirou/gopsutil/v3 v3.21.11
 	github.com/tidwall/gjson v1.12.1
 	gorm.io/driver/sqlite v1.2.6

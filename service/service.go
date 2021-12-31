@@ -3,8 +3,11 @@ package service
 import (
 	loger2 "Learn-CasaOS/pkg/utils/loger"
 
+	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 )
+
+var Cache *cache.Cache
 
 var MyService Repository
 
@@ -16,7 +19,7 @@ type Repository interface {
 	// Redis() RedisService
 	ZeroTier() ZeroTierService
 	ZiMa() ZiMaService
-	OAPI() OasisService
+	OAPI() CasaService
 	Disk() DiskService
 	Notify() NotifyServer
 	ShareDirectory() ShareDirService
@@ -24,6 +27,7 @@ type Repository interface {
 	Rely() RelyService
 	System() SystemService
 	Shortcuts() ShortcutsService
+	Search() SearchService
 }
 
 func NewService(db *gorm.DB, log loger2.OLog) Repository {

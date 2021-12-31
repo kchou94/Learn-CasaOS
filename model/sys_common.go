@@ -15,17 +15,19 @@ type UserModel struct {
 	Head        string
 	Email       string
 	Description string
+	Initialized bool //是否初始化
 }
 
 // 服务配置
 type ServerModel struct {
-	HttpPort  string
-	RunMode   string
-	ServerApi string
+	HttpPort    string
+	RunMode     string
+	ServerApi   string
+	LockAccount bool //是否锁定账号
 }
 
 // 服务配置
-type AppModel struct {
+type APPModel struct {
 	LogSavePath    string
 	LogSaveName    string
 	LogFileExt     string
@@ -44,7 +46,7 @@ type Result struct {
 }
 
 // zerotier
-type ZerotierModel struct {
+type ZeroTierModel struct {
 	UserName string
 	PWD      string
 	Token    string
@@ -60,11 +62,13 @@ type RedisModel struct {
 }
 
 type SystemConfig struct {
-	SerachSwitch    bool   `json:"search_switch"`    // 搜索开关
-	SearchEngine    string `json:"search_engine"`    // 搜索引擎
-	ShortcutsSwitch bool   `json:"shortcuts_switch"` // 快捷键开关
-	WidgetsSwitch   bool   `json:"widgets_switch"`   // 插件开关
-	BackgroundType  string `json:"background_type"`  // 背景类型
-	Background      string `json:"background"`       // 背景图片
-	AutoUpdate      bool   `json:"auto_update"`      // 自动更新
+	ConfigStr  string `json:"config_str"`  // 配置字符串
+	WidgetList string `json:"widget_list"` // 小部件列表
+	ConfigPath string `json:"config_path"` // 配置文件路径
+	SyncPort   string `json:"sync_port"`   // 同步端口
+	SyncKey    string `json:"sync_key"`    // 同步密钥
+}
+
+type CasaOSGlobalVariables struct {
+	AppChange bool // app是否更新
 }

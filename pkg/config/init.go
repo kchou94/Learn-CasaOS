@@ -23,15 +23,17 @@ var UserInfo = &model.UserModel{}
 var ServerInfo = &model.ServerModel{}
 
 // 服务配置
-var AppInfo = &model.AppModel{}
+var AppInfo = &model.APPModel{}
 
 // zerotier
-var ZerotierInfo = &model.ZerotierModel{}
+var ZerotierInfo = &model.ZeroTierModel{}
 
 // redis
 var RedisInfo = &model.RedisModel{}
 
 var SystemConfigInfo = &model.SystemConfig{}
+
+var CasaOSGlobalVariables = &model.CasaOSGlobalVariables{}
 
 var Cfg *ini.File
 
@@ -51,11 +53,12 @@ func InitSetup(config string) {
 
 	mapTo("user", UserInfo)
 	mapTo("app", AppInfo)
-	mapTo("zerotier", ZerotierInfo)
+	mapTo("zerotier", ZeroTierInfo)
 	mapTo("redis", RedisInfo)
 	mapTo("server", ServerInfo)
 	mapTo("system", SystemConfigInfo)
-	AppInfo.ProjectPath = getCurrentDirectory() // os.Getwd()
+	SystemConfigInfo.ConfigPath = configDir
+	// AppInfo.ProjectPath = getCurrentDirectory() // os.Getwd()
 }
 
 // 映射

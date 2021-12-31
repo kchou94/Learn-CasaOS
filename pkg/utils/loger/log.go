@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"time"
 
 	file2 "Learn-CasaOS/pkg/utils/file"
 )
@@ -21,6 +20,7 @@ type OLog interface {
 	Warn(v ...interface{})
 	Error(v ...interface{})
 	Fatal(v ...interface{})
+	Path() string
 }
 
 type oLog struct {
@@ -48,15 +48,26 @@ const (
 // 日志初始化
 func LogSetup() {
 	var err error
-	// filePath := fmt.Sprintf("%s", config.AppInfo.LogSavePath)
-	filePath := config.AppInfo.LogSavePath
-	fileName := fmt.Sprintf("%s%s.%s", config.AppInfo.LogSaveName, time.Now().Format(config.AppInfo.DateStrFormat), config.AppInfo.LogFileExt)
+	filePath := fmt.Sprintf("%s", config.AppInfo.LogSavePath)
+	fileName := fmt.Sprintf("%s.%s",
+		config.AppInfo.LogSaveName,
+		config.AppInfo.LogFileExt,
+	)
 	F, err = file2.MustOpen(fileName, filePath)
 	if err != nil {
 		log.Fatalf("logging.Setup err: %v", err)
 	}
 
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
+}
+
+func (o *oLog) Path() string {
+	filePath := fmt.Sprintf("%s", config.AppInfo.LogSavePath)
+	fileName := fmt.Sprintf("%s.%s",
+		config.AppInfo.LogSaveName,
+		config.AppInfo.LogFileExt,
+	)
+	return filePath + fileName
 }
 
 func (o *oLog) Debug(v ...interface{}) {
@@ -84,12 +95,12 @@ func (o *oLog) Fatal(v ...interface{}) {
 	logger.Println(v)
 }
 
-func setPrefix(lever Level) {
+func setPrefix(level Level) {
 	_, file, line, ok := runtime.Caller(DefaultCallerDepth)
 	if ok {
-		logPrefix = fmt.Sprintf("[%s][%s:%d]", levelFlags[lever], filepath.Base(file), line)
+		logPrefix = fmt.Sprintf("[%s][%s:%d]", levelFlags[level], filepath.Base(file), line)
 	} else {
-		logPrefix = fmt.Sprintf("[%s]", levelFlags[lever])
+		logPrefix = fmt.Sprintf("[%s]", levelFlags[level])
 	}
 
 	logger.SetPrefix(logPrefix)

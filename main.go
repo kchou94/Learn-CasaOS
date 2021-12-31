@@ -9,18 +9,19 @@ import (
 	"Learn-CasaOS/route"
 	"Learn-CasaOS/service"
 
-	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 var sqliteDB *gorm.DB
 
-var swagHandler gin.HandlerFunc
 var configFlag = flag.String("c", "", "config address")
+
+var showUserInfo = flag.Bool("show-user-info", false, "show user info")
 
 func init() {
 	flag.Parse()
 	config.InitSetup(*configFlag)
+	config.UpdateSetup()
 	loger2.LogSetup()
 	sqliteDB = sqlite.GetDb(config.AppInfo.ProjectPath)
 	// gredis.GetRedisConn(config.RedisInfo),

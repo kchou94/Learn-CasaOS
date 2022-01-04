@@ -8,8 +8,27 @@ import (
 	"Learn-CasaOS/pkg/utils/file"
 	"Learn-CasaOS/service"
 	"encoding/json"
+	"encoding/xml"
 	"time"
 )
+
+func InitFunction() {
+	go checkSystemApp()
+	Update2_3()
+	CheckSerialDiskMount()
+}
+
+var syncIsExistence = false
+
+func installSyncthing(appId string) {
+
+	var appInfo model.ServerAppList
+	m := model.CustomizationPostData{}
+	var dockerImage string
+	var dockerImageVersion string
+
+	appInfo = service.MyService.OAPI().GetServerAppInfo(appId)
+}
 
 // check if the system application is installed
 func checkSystemApp() {
@@ -19,7 +38,7 @@ func checkSystemApp() {
 			if v.State != "running" {
 				service.MyService.Docker().DockerContainerStart(v.CustomId)
 			}
-			syncIsExistence := true
+			syncIsExistence = true
 			if config.SystemConfigInfo.SyncPort != v.Port {
 				config.SystemConfigInfo.SyncPort = v.Port
 			}
@@ -41,6 +60,11 @@ func checkSystemApp() {
 			}
 			content := file.ReadFullFile(path)
 			syncConfig := &system_app.SyncConfig{}
+			xml.Unmarshal(content, &syncConfig)
+			config.SystemConfigInfo.SyncKey = syncConfig.Key
 		}
+	}
+	if !syncIsExistence {
+		installSyncthing("74")
 	}
 }
